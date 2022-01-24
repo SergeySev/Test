@@ -1,0 +1,53 @@
+
+import json
+
+file = open('gym_locations.json')
+data = json.load(file)
+
+
+def get_name():
+    """
+    This function returns a list of location names
+    from the file we are searching for
+    """
+    list_name = []
+    with open('location_names.txt') as location_names:
+        name = location_names.readline()
+        while name:
+            name = location_names.readline()
+            if name:
+                name = name.replace('\n', '')
+                list_name.append(name)
+    return list_name
+
+
+def data_to_lower(data):
+    """
+    This function creates a list
+    with location name from a json file
+    and converts it to lowercase
+    """
+    lower_data = []
+    for i in range(len(data)):
+        lower_data.append(data[i]['name'].lower())
+    return lower_data
+
+
+def mapping_name(data, get_name):
+    """
+    This function returns a list with the location name
+    with the corresponding uuid
+    in the format: {"location name": "uuid"}
+    """
+    answer = []
+    i = 0
+    for i in range(len(get_name)):
+        if get_name[i].lower() in data_to_lower(data):
+            index = data_to_lower(data).index(get_name[i].lower())
+            answer.append({get_name[i]: data[index]['uuid']})
+        else:
+            answer.append({get_name[i]: "NOT FOUND"})
+    return answer
+
+
+mapping_name(data, get_name())
